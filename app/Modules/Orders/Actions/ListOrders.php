@@ -2,13 +2,20 @@
 
 namespace App\Modules\Orders\Actions;
 
-use App\Modules\Orders\Models\Order;
-use Illuminate\Support\Collection;
+use App\Modules\Orders\Queries\OrderQuery;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ListOrders
 {
-    public function execute(): Collection
+    public function __construct(
+        private OrderQuery $orderQuery,
+    ) {}
+
+    public function execute(array $filters): LengthAwarePaginator
     {
-        return Order::with(['client', 'delivery', 'orderProducts.product'])->get();
+        return $this->orderQuery
+            ->apply($filters)
+            ->paginate($filters['per_page'])
+            ->withQueryString();
     }
 }
