@@ -6,6 +6,7 @@ use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Modules\Clients\Models\Client;
+use App\Modules\Orders\Http\Requests\IndexOrderRequest;
 use App\Modules\Orders\Http\Requests\StoreOrderRequest;
 use App\Modules\Orders\Http\Requests\UpdateOrderRequest;
 use App\Modules\Orders\Http\Resources\OrderResource;
@@ -28,11 +29,42 @@ class OrderController extends Controller
         protected OrderService $orderService
     ) {}
 
-    public function index(): Response
+    public function index(IndexOrderRequest $request): Response
     {
-        $orders = $this->orderService->listOrders();
+        $orders = $this->orderService->listOrders($request->validated());
+
+        $clients = Client::query()
+            ->active()
+            ->get()
+            ->map(fn($client) => [
+                'value' => $client->id,
+                'label' => $client->name
+            ]);
+
+        $deliveries = User::query()
+            ->role(Role::DELIVERY->value)
+            ->get()
+            ->map(fn($delivery) => [
+                'value' => $delivery->id,
+                'label' => $delivery->name
+            ]);
+
+        $products = Product::query()
+            ->active()
+            ->get()
+            ->map(fn($product) => [
+                'value' => $product->id,
+                'label' => $product->name
+            ]);
+
         return Inertia::render('order/Index', [
-            'orders' => OrderResource::collection($orders)
+            'orders' => OrderResource::collection($orders),
+            'filters' => $request->validated(),
+            'dropdowns' => [
+                'clients' => $clients,
+                'deliveries' => $deliveries,
+                'products' => $products,
+            ],
         ]);
     }
 

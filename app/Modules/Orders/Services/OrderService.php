@@ -12,6 +12,7 @@ use App\Modules\Orders\Actions\UpdateOrder;
 use App\Modules\Orders\Enums\OrderStatus;
 use App\Modules\Orders\Models\Order;
 use App\Modules\Product\Models\Product;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -27,9 +28,9 @@ class OrderService
         protected UpdateOrder $updateOrder,
     ) {}
 
-    public function listOrders(): Collection
+    public function listOrders(array $filters): LengthAwarePaginator
     {
-        return $this->listOrders->execute();
+        return $this->listOrders->execute($filters);
     }
 
     public function store(array $data): Order
