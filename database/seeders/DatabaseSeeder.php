@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Modules\Clients\Database\Seeders\ClientsSeeder;
+use App\Modules\Delivery\Database\Seeders\DeliveriesSeeder;
+use App\Modules\Orders\Database\Seeders\OrdersSeeder;
 use Illuminate\Database\Seeder;
 use App\Modules\Product\Database\Seeders\ProductsSeeder;
 class DatabaseSeeder extends Seeder
@@ -13,7 +15,9 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             AdminUserSeeder::class,
             ProductsSeeder::class,
-            ClientsSeeder::class
+            ClientsSeeder::class,
+            DeliveriesSeeder::class,
+            OrdersSeeder::class,
         ]);
     }
 }

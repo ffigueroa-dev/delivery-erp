@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Enums\Role;
+use App\Modules\Delivery\Database\Factories\DeliveryFactory;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -58,5 +59,10 @@ class User extends Authenticatable
     public function isDelivery(): bool
     {
         return $this->hasRole(Role::DELIVERY->value);
+    }
+
+    protected static function  newFactory(): DeliveryFactory
+    {
+        return DeliveryFactory::new();
     }
 }
