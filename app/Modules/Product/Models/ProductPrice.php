@@ -2,11 +2,13 @@
 
 namespace App\Modules\Product\Models;
 
+use App\Modules\Product\Database\Factories\ProductPriceFactory;
 use App\Modules\Product\Enums\PriceType;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * @property int $id
@@ -21,7 +23,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 ])]
 class ProductPrice extends Model
 {
-    use HasUuids;
+    use HasUuids, HasFactory;
 
     protected $keyType = 'string';
 
@@ -39,5 +41,10 @@ class ProductPrice extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    protected static function newFactory(): ProductPriceFactory
+    {
+        return ProductPriceFactory::new();
     }
 }
