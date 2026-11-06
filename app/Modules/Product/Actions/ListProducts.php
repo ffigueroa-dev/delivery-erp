@@ -2,15 +2,19 @@
 
 namespace App\Modules\Product\Actions;
 
-use App\Modules\Product\Models\Product;
-use Illuminate\Database\Eloquent\Collection;
+use App\Modules\Product\Queries\ProductQuery;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 final class ListProducts
 {
-    public function execute(): Collection
+    public function __construct(
+        private ProductQuery $productQuery,
+    ) {}
+    public function execute(array $filters): LengthAwarePaginator
     {
-        return Product::query()
-            ->with('prices')
-            ->get();
+        return $this->productQuery
+            ->apply($filters)
+            ->paginate($filters['per_page'])
+            ->withQueryString();
     }
 }

@@ -4,6 +4,7 @@ namespace App\Modules\Product\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Product\Enums\PriceType;
+use App\Modules\Product\Http\Requests\IndexProductRequest;
 use App\Modules\Product\Http\Requests\StoreProductRequest;
 use App\Modules\Product\Http\Requests\UpdateProductRequest;
 use App\Modules\Product\Http\Resources\ProductResource;
@@ -25,11 +26,13 @@ class ProductController extends Controller
         $this->productService =  $productService;
     }
 
-    public function index(): Response
+    public function index(IndexProductRequest $request): Response
     {
-        $products =  $this->productService->listProducts();
+        $filters = $request->validated();
+        $products =  $this->productService->listProducts($filters);
         return Inertia::render('product/Index', [
-            'products' => ProductResource::collection($products)
+            'products' => ProductResource::collection($products),
+            'filters' => $filters,
         ]);
     }
 
