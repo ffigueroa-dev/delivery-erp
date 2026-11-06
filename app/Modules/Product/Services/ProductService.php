@@ -7,7 +7,7 @@ use App\Modules\Product\Actions\ListProducts;
 use App\Modules\Product\Actions\StoreProduct;
 use App\Modules\Product\Actions\UpdateProduct;
 use App\Modules\Product\Models\Product;
-use Illuminate\Support\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ProductService
 {
@@ -38,9 +38,9 @@ class ProductService
     {
         return $this->deleteProduct->execute($product);
     }
-    
-    public function listProducts(): Collection
+
+    public function listProducts( array $filters): LengthAwarePaginator
     {
-        return $this->listProducts->execute();
+        return $this->listProducts->execute($filters);
     }
 }
