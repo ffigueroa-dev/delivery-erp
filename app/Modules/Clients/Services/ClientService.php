@@ -7,6 +7,7 @@ use App\Modules\Clients\Actions\ListClients;
 use App\Modules\Clients\Actions\StoreClient;
 use App\Modules\Clients\Actions\UpdateClient;
 use App\Modules\Clients\Models\Client;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 class ClientService
@@ -18,9 +19,9 @@ class ClientService
         protected DeleteClient $deleteClient,
     ) {}
 
-    public function listClients(): Collection
+    public function listClients(array $filters ): LengthAwarePaginator
     {
-        return $this->listClients->execute();
+        return $this->listClients->execute($filters);
     }
     public function storeClient(array $data): Client
     {

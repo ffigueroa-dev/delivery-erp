@@ -4,6 +4,7 @@ namespace App\Modules\Clients\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Clients\Enums\ClientType;
+use App\Modules\Clients\Http\Requests\IndexClientRequest;
 use App\Modules\Clients\Http\Requests\StoreClientRequest;
 use App\Modules\Clients\Http\Requests\UpdateClientRequest;
 use App\Modules\Clients\Http\Resources\ClientResource;
@@ -22,13 +23,15 @@ class ClientController extends Controller
         protected ClientService $clientService,
     ) {}
 
-    public function index(): Response
+    public function index(IndexClientRequest $request): Response
     {
-        $clients =  $this->clientService->listClients();
+        $filters = $request->validated();
+        $clients =  $this->clientService->listClients($filters);
         return Inertia::render(
             'client/Index',
             [
-                'clients' => ClientResource::collection($clients)
+                'clients' => ClientResource::collection($clients),
+                'filters' => $filters
             ]
         );
     }
