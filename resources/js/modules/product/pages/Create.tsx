@@ -18,14 +18,10 @@ const Create = ({ priceTypes }: CreatePageProps) => {
     const form = useForm<ProductForm>({
         name: '',
         description: '',
-        prices: priceTypes.length
-            ? [
-                  {
-                      type: priceTypes[0].value,
-                      amount: '',
-                  },
-              ]
-            : [],
+        prices: priceTypes.map((priceType) => ({
+            type: priceType.value,
+            amount: '',
+        })),
     });
 
     const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
