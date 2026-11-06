@@ -17,7 +17,7 @@ class UpdateProductRequest extends FormRequest
             'prices' => [
                 'required',
                 'array',
-                'min:1',
+                'size:2',
             ],
 
             'prices.*.type' => [

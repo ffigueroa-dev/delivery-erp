@@ -1,11 +1,8 @@
 import { Head, Link, useForm } from '@inertiajs/react';
 import type { SubmitEvent } from 'react';
 import { TextField } from '@/components/form/text-field';
-import InputError from '@/components/input-error';
 import { PageHeader } from '@/components/page-header';
 import { Button } from '@/components/ui/button';
-import { Field, FieldLabel } from '@/components/ui/field';
-import { Switch } from '@/components/ui/switch';
 import { products } from '@/routes';
 import { update as updateProduct } from '@/routes/products';
 import { ProductPricesField } from '../components/ProductPricesField';
@@ -24,10 +21,16 @@ type EditPageProps = {
 const Edit = ({ product, priceTypes }: EditPageProps) => {
     const productData = product.data;
 
-    const prices: ProductPriceForm[] = productData.prices.map((price) => ({
-        type: price.type,
-        amount: String(price.amount),
-    }));
+    const prices: ProductPriceForm[] = priceTypes.map((priceType) => {
+        const existingPrice = productData.prices.find(
+            (price) => price.type === priceType.value,
+        );
+
+        return {
+            type: priceType.value,
+            amount: existingPrice ? String(existingPrice.amount) : '',
+        };
+    });
 
     const form = useForm<UpdateProductForm>({
         name: productData.name,
