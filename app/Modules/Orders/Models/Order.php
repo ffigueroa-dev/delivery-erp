@@ -20,13 +20,17 @@ class Order extends Model
         'delivery_id',
         'status',
         'notes',
-        'total_amount'
+        'total_amount',
+        'scheduled_at',
+        'scheduled_until',
     ];
 
     protected function casts(): array
     {
         return [
-            'status' => OrderStatus::class
+            'status' => OrderStatus::class,
+            'scheduled_at' => 'immutable_datetime',
+            'scheduled_until' => 'immutable_datetime',
         ];
     }
 
