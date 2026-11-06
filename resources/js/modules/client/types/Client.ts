@@ -1,6 +1,12 @@
 import { SelectOption, UUID } from "@/types/common";
 
-export type ClientType = 'commercial' | 'retail'
+export const ClientTypeEnum = {
+    COMMERCIAL: 'commercial',
+    RETAIL: 'retail',
+} as const;
+
+export type ClientType =
+    (typeof ClientTypeEnum)[keyof typeof ClientTypeEnum];
 
 export interface Client {
     id: UUID;

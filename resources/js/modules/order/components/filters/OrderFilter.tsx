@@ -71,7 +71,6 @@ export const OrderFilter = ({
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        // El backend requiere ambas fechas si se especifica alguna.
         if (Boolean(form.date_from) !== Boolean(form.date_to)) {
             return;
         }
