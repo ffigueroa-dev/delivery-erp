@@ -29,15 +29,18 @@ class OrderQuery
 
     private function applyDateFilter(Builder $query, array $filters): void
     {
-        if (!isset($filters['date_from'])) {
-            $start_date = Carbon::today()->startOfDay();
-            $end_date = Carbon::today()->endOfDay();
-            $query->whereBetween('created_at', [$start_date, $end_date]);
-        } else {
-            $start_date = Carbon::parse($filters['date_from'])->startOfDay();
-            $end_date = Carbon::parse($filters['date_to'])->endOfDay();
-            $query->whereBetween('created_at', [$start_date, $end_date]);
-        }
+        $timezone = 'America/Argentina/Buenos_Aires';
+
+        $start_date = isset($filters['date_from'])
+            ? Carbon::parse($filters['date_from'], $timezone)->startOfDay()->utc()
+            : Carbon::today($timezone)->startOfDay()->utc();
+
+        $end_date = isset($filters['date_to'])
+            ? Carbon::parse($filters['date_to'], $timezone)->endOfDay()->utc()
+            : Carbon::today($timezone)->endOfDay()->utc();
+
+        $query->whereBetween('created_at', [$start_date, $end_date])
+            ->orWhereBetween('scheduled_at', [$start_date, $end_date]);
     }
 
     private function applyStatusFilter(Builder $query, array $filters): void
